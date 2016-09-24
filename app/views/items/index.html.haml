@@ -1,6 +1,33 @@
 - if user_signed_in?
-	- @items.each do |item|
-		%h2= link_to item.title, item
-		%p= item.description
+	.col-md-10.col-md-offset-1
+		- @items.each do |item|
+			.index-wrapper
+				.row.item
+					- if item.completed?
+						.col-md-2
+							%p= link_to icon('check', class: 'fa-lg'), complete_item_path(item), method: :patch
+						.col-md-2
+							%p= link_to icon('trash', class: 'fa-lg'), item, method: :delete
+						.col-md-8
+							%h2.item-title{ style: 'opacity: 0.5' }
+								%strike= link_to item.title, item
+							%p.item-sub-title.item-desc{ style: 'opacity: 0.5' }= item.description
+							%p.time-created-at.item-sub-title{ style: 'opacity: 0.5' }
+								Completed 
+								= time_ago_in_words(item.completed_at)
+								ago
+					- else
+						.col-md-2
+							%p= link_to icon('check', class: 'fa-lg'), complete_item_path(item), method: :patch
+						.col-md-8
+							%h2.item-title= link_to item.title, item
+							%p.item-sub-title.item-desc= item.description
+							%p.time-created-at.item-sub-title{ style: 'opacity: 0.5' }
+								Created 
+								= time_ago_in_words(item.created_at)
+								ago
+						.col-md-2
+							%p= link_to icon('trash', class: 'fa-lg'), item, method: :delete
+
 - else
 	= render 'welcome'
